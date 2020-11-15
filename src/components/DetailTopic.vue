@@ -4,12 +4,12 @@
     <div>
       <div class="card">
         <div class="card-header">
-        <div v-for="(detail,idex) in $store.getters.selects" :key="idex">
-          <h2>กระทู้ {{ detail.title}}</h2>
-        </div>
+        <!-- <div v-for="(detail,idex) in $store.getters.selects" :key="idex"> -->
+          <h2>กระทู้ {{ selectedTopic.title }}</h2>
+        <!-- </div> -->
         </div>
         <div class="card-body">
-        <div v-for="(detail,idex) in $store.getters.selects" :key="idex">
+        <!-- <div v-for="(detail,idex) in $store.getters.selects" :key="idex"> -->
           <table class="table table-hover">
             <thead>
               <tr>
@@ -20,19 +20,20 @@
                 <th style="width: 20">เจ้าของ</th>
               </tr>
             </thead>
-            <tbody v-for="(document,index) in $store.getters.collections" :key="index">
-              <tr v-if="detail.title == document.title">
-                <td>{{ document.title }}</td>
-                <td>{{ document.detail }}</td>
-                <td>{{ document.subject }}</td>
-                <td>{{ document.email }}</td>
+            <!-- <tbody v-for="(document,index) in $store.getters.collections" :key="index"> -->
+              <!-- <tr v-if="detail.title == document.title"> -->
+              <tr>
+                <td>{{ selectedTopic.title }}</td>
+                <td>{{ selectedTopic.detail }}</td>
+                <td>{{ selectedTopic.subject }}</td>
+                <td>{{ selectedTopic.email }}</td>
               </tr>
-            </tbody>
+            <!-- </tbody> -->
           </table>
 
           <div class="nav-right">
-            <button type="button" class="btn btn-secondary" v-on:click="backTohome(detail._id)">กลับ</button>
-          </div>
+            <button type="button" class="btn btn-secondary" v-on:click="backTohome()">กลับ</button>
+          <!-- </div> -->
         </div>
 
         </div>
@@ -47,12 +48,14 @@
             return {
             title: "",
             detail: "",
-            subject: ""
+            subject: "",
+            selectedTopic: {}
             };
   },
   created(){
     this.fetchTopic();
     this.fetchSelect();
+    this.fetchSelectedTopic()
   },
   methods: {
         fetchSelect(){
@@ -61,10 +64,11 @@
         fetchTopic(){
             this.$store.dispatch("fetchTopic");
         },
-        backTohome(_id){
+        fetchSelectedTopic() {
+          this.selectedTopic = this.$store.state.selectedTopic
+        },
+        backTohome(){
             //alert(_id);
-            let payload = {index: 0 ,_id: _id}
-            this.$store.dispatch("deleteSelect", payload);
             this.$router.replace("Home");
         }
   }

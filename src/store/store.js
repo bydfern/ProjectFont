@@ -11,7 +11,9 @@ export const store = new Vuex.Store({
     sessions: [],
     collections:[],
     members:[],
-    selects:[]
+    selects:[],
+    selectedTopic: {},
+    currentEmail: ''
   },
 
   mutations: {
@@ -53,7 +55,13 @@ export const store = new Vuex.Store({
     },
     deleteSelect(state, { index }) {
       state.selects.splice(index, 1);
-  }
+    },
+    addSelectedTopic(state, { payload }) {
+      state.selectedTopic = payload;
+    },
+    setCurrentEmail(state, { email }) {
+      state.currentEmail = email
+    }
   },
 
   actions: {
@@ -123,6 +131,12 @@ export const store = new Vuex.Store({
       await Axios.delete(mongo_api+"select/" + payload._id)
         .then(() => commit("deleteSelect", { payload }))
         .catch(err => alert(err));
+    },
+    async addSelectedTopic({ commit }, payload) {
+      commit("addSelectedTopic", { payload })
+    },
+    async setCurrentEmail({commit}, email) {
+      commit("setCurrentEmail", {email})
     }
   },
 

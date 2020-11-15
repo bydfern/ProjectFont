@@ -7,7 +7,6 @@
           <h2>กระทู้ของฉัน</h2>
         </div>
         <div class="card-body">
-          <div v-for="(session,idex) in $store.getters.sessions" :key="idex">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -19,8 +18,8 @@
                 <th style="width: 25%">การกระทำ</th>
               </tr>
             </thead>
-            <tbody v-for="(document,index) in $store.getters.collections" :key="index">
-              <tr v-if="session.email == document.email">
+            <tbody v-for="(document,index) in topics" :key="index">
+              <tr v-if="currentEmail == document.email">
                 <!-- <td>{{ index + 1 }}</td> -->
                 <td v-if="index !== editIndex">{{ document.title }}</td>
                 <td v-if="index !== editIndex">{{ document.detail }}</td>
@@ -60,7 +59,6 @@
               </tr>
             </tbody>
           </table>
-          </div>
           <div class="nav-right">
             <button type="button" class="btn btn-secondary" v-on:click="backTohome()">กลับ</button>
           </div>
@@ -78,12 +76,16 @@ export default {
       editIndex: -1,
       title: "",
       detail: "",
-      subject: ""
+      subject: "",
+      currentEmail: '',
+      topics: []
     };
   },
   created(){
     this.fetchTopic();
     this.fetchSession();
+    this.getCurrentEmail();
+    this.getTopic();
   },
   methods: {
     fetchSession(){
@@ -94,6 +96,7 @@ export default {
     },
     deleteTopic(index,_id) {
       let payload = { index: index , _id: _id}
+      this.topics.splice(index, 1)
       this.$store.dispatch("deleteTopic", payload);
     },
     openEdit(index, document) {
@@ -116,10 +119,17 @@ export default {
         detail: this.detail,
         subject: this.subject
       };
+      this.topics[this.editIndex] = { email: this.currentEmail, ...payload }
       this.$store.dispatch("editTopic", payload).then(this.closeEdit());
+    },
+    getCurrentEmail() {
+      this.currentEmail = this.$store.state.currentEmail
     },
     backTohome(){
       this.$router.replace("Home");
+    },
+    getTopic() {
+      this.topics = this.$store.state.collections
     }
   }
 };

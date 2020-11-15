@@ -3,7 +3,6 @@
 <div class="topnav" >
       <a href="#home">EDUCATE SPACE</a>
     <div class="topnav-right">
-      <a href="#" v-for="(session,index) in $store.getters.sessions" :key="index">{{ session.email }}</a>
       <router-link :to="{name: 'Home'}">หน้าหลัก</router-link>
       <a href="#contact">ติดต่อ</a>
       <router-link :to="{name: 'CreateTopic'}">สร้างกระทู้</router-link>
@@ -45,7 +44,7 @@
                 <td><button
                     type="button"
                     class="btn btn-primary"
-                    v-on:click="addselect(document.title)"
+                    v-on:click="addSelectedTopic(document)"
                   >View</button></td>
               </tr>
             </tbody>
@@ -69,11 +68,11 @@
                 }
             });
         },
+        created(){
+          this.fetchTopic();
+          this.fetchMember();
+        },
         methods: {
-            created(){
-              this.fetchTopic();
-              this.fetchMember();
-            },
             signout(index,_id) {
                 let payload = { index: index , _id: _id}
                 this.$store.dispatch("deleteSession", payload);
@@ -116,6 +115,10 @@
               this.$store.dispatch("addSelect", payload);
               console.log("เพิ่มข้อมูลลง select แล้ว"+title);
               this.$router.replace("/Detail_Topic");
+            },
+            addSelectedTopic(payload) {
+              this.$store.dispatch("addSelectedTopic", payload),
+              this.$router.replace("/Detail_Topic")
             }
         }
     };
