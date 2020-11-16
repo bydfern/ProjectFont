@@ -21,7 +21,7 @@
               </tr>
             </thead>
             <tbody v-for="(member,index) in $store.getters.members" :key="index">
-              <tr v-if="session.email == member.email">
+              <tr v-if="currentEmail == member.email">
                 <td v-if="index !== editIndex">{{ member.realname }}</td>
                 <td v-if="index !== editIndex">{{ member.surname }}</td>
                 <td v-if="index !== editIndex">{{ member.birthdate }}</td>
