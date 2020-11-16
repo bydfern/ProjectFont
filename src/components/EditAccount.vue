@@ -20,7 +20,7 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody v-for="(member,index) in $store.getters.members" :key="index">
+            <tbody v-for="(member,index) in members" :key="index">
               <tr v-if="currentEmail == member.email">
                 <td v-if="index !== editIndex">{{ member.realname }}</td>
                 <td v-if="index !== editIndex">{{ member.surname }}</td>
@@ -85,7 +85,8 @@ export default {
       faculty: "",
       department: "",
       imageData: null,
-      currentEmail: ''
+      currentEmail: '',
+      members: []
     };
   },
   created(){
@@ -99,6 +100,7 @@ export default {
     },
     fetchMember(){
       this.$store.dispatch("fetchMember");
+      this.members = this.$store.state.members
     },
     openEdit(index, member) {
       this.editIndex = index;
@@ -129,6 +131,7 @@ export default {
         faculty: this.faculty,
         department: this.department
       };
+      this.members[this.editIndex] = { email: this.currentEmail, ...payload }
       this.$store.dispatch("editMember", payload).then(this.closeEdit());
       if(this.imageData != null){
               const storageRef=firebase.storage().ref(`${this.imageData.name}`).put(this.imageData);
