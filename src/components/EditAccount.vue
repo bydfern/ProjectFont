@@ -7,7 +7,6 @@
           <h2>แก้ไขโปรไฟล์</h2>
         </div>
         <div class="card-body">
-          <div v-for="(session,idex) in $store.getters.sessions" :key="idex">
           <table class="table table-hover">
             <thead>
               <tr>
@@ -63,7 +62,6 @@
               </tr>
             </tbody>
           </table>
-          </div>
           <div class="nav-right">
             <button type="button" class="btn btn-secondary" v-on:click="backTohome()">กลับ</button>
           </div>
@@ -86,12 +84,14 @@ export default {
       univer: "",
       faculty: "",
       department: "",
-      imageData: null
+      imageData: null,
+      currentEmail: ''
     };
   },
   created(){
     this.fetchMember();
     this.fetchSession();
+    this.fetchCurrentEmail()
   },
   methods: {
     fetchSession(){
@@ -140,6 +140,9 @@ export default {
     },
     previewImage(event) {
       this.imageData = event.target.files[0];
+    },
+    fetchCurrentEmail() {
+      this.currentEmail = this.$store.state.currentEmail
     }
   }
 };
