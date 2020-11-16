@@ -16,7 +16,7 @@
                 <th style="width: 20">มหาวิทยาลัย</th>
                 <th style="width: 20%">คณะ</th>
                 <th style="width: 18%">สาขา</th>
-                <th style="width: 10%">เปลี่ยนรูปโปรไฟล์</th>
+                <!-- <th style="width: 10%">เปลี่ยนรูปโปรไฟล์</th> -->
                 <th></th>
               </tr>
             </thead>
@@ -28,7 +28,7 @@
                 <td v-if="index !== editIndex">{{ member.univer }}</td>
                 <td v-if="index !== editIndex">{{ member.faculty }}</td>
                 <td v-if="index !== editIndex">{{ member.department }}</td>
-                <td v-if="index !== editIndex"><input type="file" @change="previewImage" accept="image/*" ></td>
+                <!-- <td v-if="index !== editIndex"><input type="file" @change="previewImage" accept="image/*" ></td> -->
                 <td v-if="index !== editIndex">
                   <button
                     type="button"
