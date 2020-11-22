@@ -3,6 +3,7 @@
 <div class="topnav" >
       <a href="#home">EDUCATE SPACE</a>
     <div class="topnav-right">
+      <img :src="imageUrl" width="50px" height="50px">
       <router-link :to="{name: 'Home'}">หน้าหลัก</router-link>
       <a href="#contact">ติดต่อ</a>
       <router-link :to="{name: 'CreateTopic'}">สร้างกระทู้</router-link>
@@ -14,7 +15,7 @@
       
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" v-for="(session,index) in $store.getters.sessions" :key="index">
             <a class="dropdown-item" v-on:click="signout(index,session._id)">ออกจากระบบ</a>
-            <a class="dropdown-item" v-on:click="updatepass(session.email)">แก้ไขรหัสผ่าน</a>
+            <a class="dropdown-item" v-on:click="updatepass()">แก้ไขรหัสผ่าน</a>
             <a class="dropdown-item" v-on:click="editAccount()">แก้ไขโปรไฟล์</a>
             <a class="dropdown-item" v-on:click="deleteaccount()">ปิดบัญชีผู้ใช้</a>
         </div> 
@@ -56,7 +57,10 @@
 </template>
 
 <script>
-    import firebase from "firebase";
+  import firebase from "firebase";
+  import Axios from 'axios';
+  const mongo_api = process.env.VUE_APP_TOPICS_API;
+    
    // import { store } from "./store/store";
     export default{
         name: "Home",
@@ -68,9 +72,15 @@
                 }
             });
         },
+        data() {
+          return {
+            imageUrl: null
+          }
+        },
         created(){
           this.fetchTopic();
           this.fetchMember();
+          this.getCurrentMemberData()
         },
         methods: {
             signout(index,_id) {
@@ -82,14 +92,16 @@
                 });
             },
             deleteaccount(){
-                firebase.auth().currentUser.delete().then(() => {
-                    this.$router.replace("/");
-                });
-
+              firebase.auth().currentUser.delete().then(() => {
+                Axios.delete(`${mongo_api}topic/delete-user-topic?email=${sessionStorage.getItem('email')}`)
+                Axios.delete(`${mongo_api}member/delete-by-email?email=${sessionStorage.getItem('email')}`)
+                sessionStorage.clear()
+                this.$router.replace("/");
+              });
             },
-            updatepass(email) {
+            updatepass() {
             var auth = firebase.auth();
-            var emailAddress = email;
+            var emailAddress = sessionStorage.getItem('email');
 
             auth.sendPasswordResetEmail(emailAddress).then(
                  () => {
@@ -119,6 +131,10 @@
             addSelectedTopic(payload) {
               this.$store.dispatch("addSelectedTopic", payload),
               this.$router.replace("/Detail_Topic")
+            },
+            getCurrentMemberData() {
+              const membersData = this.$store.state.members
+              this.imageUrl = membersData.find(x => x.email == sessionStorage.getItem('email')).imageUrl
             }
         }
     };

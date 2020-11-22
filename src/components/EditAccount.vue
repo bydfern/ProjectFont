@@ -85,14 +85,13 @@ export default {
       faculty: "",
       department: "",
       imageData: null,
-      currentEmail: '',
+      currentEmail: sessionStorage.getItem('email'),
       members: []
     };
   },
   created(){
     this.fetchMember();
     this.fetchSession();
-    this.fetchCurrentEmail()
   },
   methods: {
     fetchSession(){
@@ -143,9 +142,6 @@ export default {
     },
     previewImage(event) {
       this.imageData = event.target.files[0];
-    },
-    fetchCurrentEmail() {
-      this.currentEmail = this.$store.state.currentEmail
     }
   }
 };

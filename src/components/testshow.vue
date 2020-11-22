@@ -77,14 +77,13 @@ export default {
       title: "",
       detail: "",
       subject: "",
-      currentEmail: '',
+      currentEmail: sessionStorage.getItem('email'),
       topics: []
     };
   },
   created(){
     this.fetchTopic();
     this.fetchSession();
-    this.getCurrentEmail();
     this.getTopic();
   },
   methods: {
@@ -121,9 +120,6 @@ export default {
       };
       this.topics[this.editIndex] = { email: this.currentEmail, ...payload }
       this.$store.dispatch("editTopic", payload).then(this.closeEdit());
-    },
-    getCurrentEmail() {
-      this.currentEmail = this.$store.state.currentEmail
     },
     backTohome(){
       this.$router.replace("Home");

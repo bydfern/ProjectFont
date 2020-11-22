@@ -47,11 +47,12 @@ export default {
             firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
                  () => {
                    if(this.email){
-                      console.log("Session...");
-                      let payload = { email: this.email};
-                      this.$store.dispatch("addSession", payload);
-                      this.$store.dispatch("setCurrentEmail", this.email)
-                    }
+                    console.log("Session...");
+                    let payload = { email: this.email};
+                    this.$store.dispatch("addSession", payload);
+                    this.$store.dispatch("setCurrentEmail", this.email)
+                    sessionStorage.setItem('email', this.email)
+                  }
                    console.log("เข้าสู่ระบบสำเร็จ!!!");
                    this.$router.replace("Home");
                  },

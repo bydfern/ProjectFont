@@ -6,7 +6,7 @@
           <h2>สร้างกระทู้</h2>
         </div>
         <div class="card-body">
-          <form @submit="createTopic(session.email)" v-for="(session,index) in $store.getters.sessions" :key="index">
+          <form @submit="createTopic()">
             <div class="form-group">
               <label>ชื่อเรื่อง</label>
               <input v-model="title" type="text" class="form-control" placeholder="ชื่อเรื่อง.."/>
@@ -43,14 +43,15 @@ export default {
             return { 
                 title: "",
                 detail: "",
-                subject: ""
+                subject: "",
+                email: sessionStorage.getItem('email')
             };
         },
   methods: {
-       createTopic(email) {
+       createTopic() {
             if(this.title != "" && this.detail != "" && this.subject != ""){
                 console.log("create topic success...");
-                let payload = { title: this.title, detail: this.detail, subject: this.subject , email: email};
+                let payload = { title: this.title, detail: this.detail, subject: this.subject , email: this.email};
                 this.$store.dispatch("addTopic", payload);
                 this.$router.replace("Home");
             }else{
