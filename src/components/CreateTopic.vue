@@ -1,12 +1,11 @@
 <template>
-    <div class="container fluid">
+    <div class="container">
     <br />
       <div class="card">
         <div class="card-header">
           <h2>สร้างกระทู้</h2>
         </div>
         <div class="card-body">
-          <form @submit="createTopic()">
             <div class="form-group">
               <label>ชื่อเรื่อง</label>
               <input v-model="title" type="text" class="form-control" placeholder="ชื่อเรื่อง.."/>
@@ -32,11 +31,10 @@
             </div>
 
             <div class="nav-right">
-                <button type="submit" value="submit" class="btn btn-success">สร้าง</button>&nbsp;
+                <button type="submit" value="submit" class="btn btn-success" @click="createTopic()">สร้าง</button>&nbsp;
                 <button type="reset" class="btn btn-danger">ยกเลิก</button>&nbsp;
                 <button type="button" class="btn btn-secondary" v-on:click="backTohome()">กลับ</button>
             </div>
-          </form>
         </div>
       </div>
   </div>
@@ -63,8 +61,6 @@ export default {
           if (this.fileData != null) {
             console.log(this.fileData)
             const name = Date.now().toString()
-            console.log(name)
-            console.log(payload)
             const fileRef = firebase.storage().ref(name).put(this.fileData)
             const uploadComplete = await Promise.all([fileRef])
             if (uploadComplete) {
@@ -72,11 +68,10 @@ export default {
               payload.fileUrl = fileUrl
             }
           }
-          console.log(payload)
           console.log("create topic success...");
           this.$store.dispatch("addTopic", payload);
           this.$router.replace("Home");
-        }else{
+        }else {
             alert("กรอกข้อมูลให้ครบ");
         }
       },

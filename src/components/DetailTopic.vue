@@ -14,10 +14,11 @@
             <thead>
               <tr>
                 <!-- <th style="width: 8.33%">ลำดับ</th>-->
-                <th style="width: 20%">เรื่อง</th>
-                <th style="width: 43.33%">รายละเอียด</th>
-                <th style="width: 16.66%">วิชา</th>
-                <th style="width: 20">เจ้าของ</th>
+                <th style="width: 30%">เรื่อง</th>
+                <th style="width: 20%">รายละเอียด</th>
+                <th style="width: 30%">วิชา</th>
+                <th style="width: 10%">ลิ้งไฟล์แนบ</th>
+                <th style="width: 10%">เจ้าของ</th>
               </tr>
             </thead>
             <!-- <tbody v-for="(document,index) in $store.getters.collections" :key="index"> -->
@@ -26,6 +27,7 @@
                 <td>{{ selectedTopic.title }}</td>
                 <td>{{ selectedTopic.detail }}</td>
                 <td>{{ selectedTopic.subject }}</td>
+                <td><a :href="selectedTopic.fileUrl">Link</a></td>
                 <td>{{ selectedTopic.email }}</td>
               </tr>
             <!-- </tbody> -->
