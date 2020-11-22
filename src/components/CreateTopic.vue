@@ -25,6 +25,12 @@
                 <option>COMPUTER PROGRAMING</option>
               </select>
             </div>
+
+            <div class="form-group">
+              <label>อัพโหลดไฟล์ประกอบ</label>
+              <input type="file" @change="setFileData" accept="*" class="mx-3">
+            </div>
+
             <div class="nav-right">
                 <button type="submit" value="submit" class="btn btn-success">สร้าง</button>&nbsp;
                 <button type="reset" class="btn btn-danger">ยกเลิก</button>&nbsp;
@@ -37,6 +43,8 @@
 </template>
 
 <script>
+import * as firebase from "firebase/app";
+
 export default {
   name: "CreateTopic",
   data() {
@@ -44,23 +52,40 @@ export default {
                 title: "",
                 detail: "",
                 subject: "",
-                email: sessionStorage.getItem('email')
+                email: sessionStorage.getItem('email'),
+                fileData: null
             };
         },
   methods: {
-       createTopic() {
-            if(this.title != "" && this.detail != "" && this.subject != ""){
-                console.log("create topic success...");
-                let payload = { title: this.title, detail: this.detail, subject: this.subject , email: this.email};
-                this.$store.dispatch("addTopic", payload);
-                this.$router.replace("Home");
-            }else{
-                alert("กรอกข้อมูลให้ครบ");
+      async createTopic() {
+        if(this.title != "" && this.detail != "" && this.subject != ""){
+          let payload = { title: this.title, detail: this.detail, subject: this.subject , email: this.email};
+          if (this.fileData != null) {
+            console.log(this.fileData)
+            const name = Date.now().toString()
+            console.log(name)
+            console.log(payload)
+            const fileRef = firebase.storage().ref(name).put(this.fileData)
+            const uploadComplete = await Promise.all([fileRef])
+            if (uploadComplete) {
+              const fileUrl = await fileRef.snapshot.ref.getDownloadURL()
+              payload.fileUrl = fileUrl
             }
-       },
-       backTohome(){
+          }
+          console.log(payload)
+          console.log("create topic success...");
+          this.$store.dispatch("addTopic", payload);
           this.$router.replace("Home");
-       }
+        }else{
+            alert("กรอกข้อมูลให้ครบ");
+        }
+      },
+      backTohome(){
+        this.$router.replace("Home");
+      },
+      setFileData(event) {
+        this.fileData = event.target.files[0]
+      }
   }
 }
 </script>
